@@ -11,7 +11,8 @@ function App() {
   const [filterCategoryOption, setFilterCategoryOption] = useState([]);
   const [filterSubCategoryOption,setFilterSubCategoryOption]=useState([]);
   const [search, setSearch] = useState('');
-  const [searchResultShowed, setSearchResultShowed] = useState(false)
+  const [searchResultShowed, setSearchResultShowed] = useState(false);
+  const [sorted,setSorted]=useState([]);
 
   useEffect(() => {
     fetch('/products.json')
@@ -107,12 +108,31 @@ const matchedBothProduct = products.filter(product => filterCategoryOption.inclu
     setSearchResultShowed(false);
   }
 
+  const handleSelectOption=(e)=>{
+   console.log(e.target.value)
+   if(e.target.value==='ascending'){
+    const ascending=[...filteredProducts].sort((a,b)=>a.price-b.price);
+    setFilteredProducts(ascending);
+  // setSorted()
+   }
+ else  if(e.target.value==='descending'){
+    const descending=[...filteredProducts].sort((a,b)=>b.price-a.price);
+    setFilteredProducts(descending);
+  }
+  else {
+    const relevant=[...filteredProducts].sort(() => Math.random() - 0.5);
+    setFilteredProducts(relevant);
+  }
+
+  }
+
 
 
   return (
     <>
-
-      <form onSubmit={searchProducts}>
+<div>
+  <div>
+  <form onSubmit={searchProducts}>
         <input type='text' placeholder='Enter text to Search!' name='searchtext' />
         <button >Search</button>
       </form>
@@ -120,6 +140,17 @@ const matchedBothProduct = products.filter(product => filterCategoryOption.inclu
       {
        searchResultShowed? <div> showing search result for:<hr/> {search} <br/> <button className='text-red-700' onClick={handleShowResults}>  close search result</button></div> :''
       }
+  </div>
+
+  <div>
+    <select onChange={handleSelectOption}>
+      <option value="relevant">Relevant</option>
+      <option value="ascending">Price: Low to High</option>
+      <option value="descending">Price: High to Low</option>
+    </select>
+  </div>
+</div>
+   
 
 
       <div>
