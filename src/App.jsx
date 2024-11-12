@@ -8,7 +8,8 @@ function App() {
 
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [filterOption, setFilterOption] = useState([]);
+  const [filterCategoryOption, setFilterCategoryOption] = useState([]);
+  const [filterSubCategoryOption,setFilterSubCategoryOption]=useState([]);
   const [search, setSearch] = useState('');
   const [searchResultShowed, setSearchResultShowed] = useState(false)
 
@@ -26,27 +27,50 @@ function App() {
 
   }, [])
 
-
-  const handlefilterInput = (e) => {
-    if (filterOption.includes(e.target.value)) {
-      setFilterOption(filterOption.filter(item => !item.includes(e.target.value)))
+//handle category filter
+  const handleCategoryFilterInput = (e) => {
+    if (filterCategoryOption.includes(e.target.value)) {
+      setFilterCategoryOption(filterCategoryOption.filter(item => !item.includes(e.target.value)))
 
     }
     else {
-      const newFilterOption = [...filterOption, e.target.value]
-      setFilterOption(newFilterOption)
+      const newFilterOption = [...filterCategoryOption, e.target.value]
+      setFilterCategoryOption(newFilterOption)
 
     }
   }
 
+  //handle sub-category filter
 
+  const handleSubCategoryFilterInput=(e)=>{
+    console.log(e.target.value);
+    if(filterSubCategoryOption.includes(e.target.value)){
+     setFilterSubCategoryOption(filterSubCategoryOption.filter(item=>!item.includes(e.target.value)))
+    }
+    else{
+      const newFilterSubOption=[...filterSubCategoryOption,e.target.value];
+      setFilterSubCategoryOption(newFilterSubOption);
+    }
+
+  }
+
+  //update FilteredProducts
 
   const updateFilteredproducts = () => {
-    if (filterOption.length > 0) {
-      const matchedProduct = products.filter(product => filterOption.includes(product.category));
-      setFilteredProducts(matchedProduct);
+    if(filterCategoryOption.length>0 && filterSubCategoryOption.length>0){
+const matchedBothProduct = products.filter(product => filterCategoryOption.includes(product.category)&&filterSubCategoryOption.includes(product.subCategory));
+      setFilteredProducts(matchedBothProduct);
+    }
+    else  if (filterCategoryOption.length>0) {
+      const matchedCategoryProduct = products.filter(product => filterCategoryOption.includes(product.category))
+      setFilteredProducts(matchedCategoryProduct);
 
     }
+    else if(filterSubCategoryOption.length>0){
+      const matchedSubCategoryProduct = products.filter(product => filterSubCategoryOption.includes(product.subCategory));
+      setFilteredProducts(matchedSubCategoryProduct);
+    }
+ 
     else {
       setFilteredProducts(products);
     }
@@ -55,9 +79,9 @@ function App() {
 
   useEffect(() => {
     updateFilteredproducts();
-    console.log(filterOption);
+    console.log(filterCategoryOption,filterSubCategoryOption);
 
-  }, [filterOption]);
+  }, [filterCategoryOption,filterSubCategoryOption]);
 
   useEffect(() => {
     console.log(filteredProducts);
@@ -99,20 +123,39 @@ function App() {
 
 
       <div>
-        <input type="checkbox" onChange={handlefilterInput} value={"Men"} name="Men" />
+        <input type="checkbox" onChange={handleCategoryFilterInput} value={"Men"} name="Men" />
         <p>Men</p>
       </div>
       <div>
-        <input type="checkbox" onChange={handlefilterInput} value={"Women"} name="Women" />
+        <input type="checkbox" onChange={handleCategoryFilterInput} value={"Women"} name="Women" />
         <p>Women</p>
       </div>
       <div>
-        <input type="checkbox" onChange={handlefilterInput} value={"Kids"} name="Kids" />
+        <input type="checkbox" onChange={handleCategoryFilterInput} value={"Kids"} name="Kids" />
         <p>Kids</p>
+      </div>
+
+<hr/>
+
+      <div>
+        <input type="checkbox" onChange={handleSubCategoryFilterInput} value={"Topwear"} name="Topwear" />
+        <p>Topwear</p>
+      </div>
+      <div>
+        <input type="checkbox" onChange={handleSubCategoryFilterInput} value={"Footwear"} name="Footwear" />
+        <p>Footwear</p>
+      </div>
+      <div>
+        <input type="checkbox" onChange={handleSubCategoryFilterInput} value={"Bottomwear"} name="Bottomwear" />
+        <p>Bottomwear</p>
+      </div>
+      <div>
+        <input type="checkbox" onChange={handleSubCategoryFilterInput} value={"Outerwear"} name="Outerwear" />
+        <p>Outerwear</p>
       </div>
       {
         // filteredProducts.length>0 &&
-        filteredProducts.map((item, index) => <Product key={index} item={item}> </Product>)
+       filteredProducts&& filteredProducts.map((item, index) => <Product key={index} item={item}> </Product>)
       }
     </>
   )
