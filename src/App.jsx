@@ -12,7 +12,8 @@ function App() {
   const [filterSubCategoryOption,setFilterSubCategoryOption]=useState([]);
   const [search, setSearch] = useState('');
   const [searchResultShowed, setSearchResultShowed] = useState(false);
-  const [sorted,setSorted]=useState([]);
+ 
+  const [stockSort,setStockSort]=useState([]);
 
   useEffect(() => {
     fetch('/products.json')
@@ -89,6 +90,7 @@ const matchedBothProduct = products.filter(product => filterCategoryOption.inclu
   }, [updateFilteredproducts])
 
 
+//handle search function
 
   const searchProducts = (e) => {
     e.preventDefault();
@@ -108,12 +110,14 @@ const matchedBothProduct = products.filter(product => filterCategoryOption.inclu
     setSearchResultShowed(false);
   }
 
+  //handle select option
+
   const handleSelectOption=(e)=>{
    console.log(e.target.value)
    if(e.target.value==='ascending'){
     const ascending=[...filteredProducts].sort((a,b)=>a.price-b.price);
     setFilteredProducts(ascending);
-  // setSorted()
+
    }
  else  if(e.target.value==='descending'){
     const descending=[...filteredProducts].sort((a,b)=>b.price-a.price);
@@ -125,6 +129,11 @@ const matchedBothProduct = products.filter(product => filterCategoryOption.inclu
   }
 
   }
+
+//handle stock based sorting
+useEffect(()=>{
+  const StockedProduct= products.filter(product=>product.stock>50);
+  setStockSort(StockedProduct)},[products])
 
 
 
@@ -151,8 +160,6 @@ const matchedBothProduct = products.filter(product => filterCategoryOption.inclu
   </div>
 </div>
    
-
-
       <div>
         <input type="checkbox" onChange={handleCategoryFilterInput} value={"Men"} name="Men" />
         <p>Men</p>
@@ -187,6 +194,11 @@ const matchedBothProduct = products.filter(product => filterCategoryOption.inclu
       {
         // filteredProducts.length>0 &&
        filteredProducts&& filteredProducts.map((item, index) => <Product key={index} item={item}> </Product>)
+      }
+<hr></hr>
+<div>Here is items which has higher stock than 50 : </div>
+      {
+        stockSort&& stockSort.map((item, index) => <Product key={index} item={item}> </Product>)
       }
     </>
   )
