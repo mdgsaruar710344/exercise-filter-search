@@ -5,6 +5,8 @@ export const ShopContext=createContext(null)
 const ShopProvider = ({children}) => {
 
   const [products, setProducts] = useState([]);
+  const [cart,setCart]=useState([]);
+  const [cartQuantity,setCartQuantity]=useState(0);
 
 
   useEffect(() => {
@@ -19,8 +21,11 @@ const ShopProvider = ({children}) => {
       })
 
   }, [])
+  useEffect(()=>{
+    console.log(cart);
+  },[cart])
 
-const shopinfo={products}
+const shopinfo={products,cart,setCart,cartQuantity,setCartQuantity}
 
 
   return (

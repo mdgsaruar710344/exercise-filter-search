@@ -1,10 +1,11 @@
 import { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { ShopContext } from "../context/ShopProvider";
 
 
 const Navbar = () => {
-//   const {shopinfo}= useContext(ShopContext)
+   const {cartQuantity}= useContext(ShopContext);
+  const navigate= useNavigate();
 //  console.log(shopinfo);
   const navbarmenu=<>
      <ul className="flex flex-row">
@@ -48,7 +49,7 @@ const Navbar = () => {
     </ul>
   </div>
   <div className=" border m-5">
-    Cart: 10
+   <button onClick={()=>navigate("/cart")}> Cart: {cartQuantity} </button>
   </div>
   <div className="navbar-end">
     <a className="btn">Button</a>

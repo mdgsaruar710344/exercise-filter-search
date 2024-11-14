@@ -8,7 +8,7 @@ const Product = ({item}) => {
   return (
     <div className="hover:cursor-pointer m-10 border border-red-800 p-4" onClick={()=>{navigate(`/product/${id}`)}} >
      Title: {title}
-     <img className="w-40" src={photo}/>
+     <img className="w-40" src={photo[0]}/>
      Price: {price}
      
     </div>
