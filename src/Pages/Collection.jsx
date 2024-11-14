@@ -1,10 +1,10 @@
 
 import { useEffect } from 'react'
-import './App.css'
-import { useState } from 'react'
-import Product from './Product';
 
-function App() {
+import { useState } from 'react'
+import Product from '../components/Product';
+
+function Collection() {
 
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -13,7 +13,7 @@ function App() {
   const [search, setSearch] = useState('');
   const [searchResultShowed, setSearchResultShowed] = useState(false);
  
-  const [stockSort,setStockSort]=useState([]);
+ 
 
   useEffect(() => {
     fetch('/products.json')
@@ -33,12 +33,10 @@ function App() {
   const handleCategoryFilterInput = (e) => {
     if (filterCategoryOption.includes(e.target.value)) {
       setFilterCategoryOption(filterCategoryOption.filter(item => !item.includes(e.target.value)))
-
     }
     else {
       const newFilterOption = [...filterCategoryOption, e.target.value]
       setFilterCategoryOption(newFilterOption)
-
     }
   }
 
@@ -53,7 +51,6 @@ function App() {
       const newFilterSubOption=[...filterSubCategoryOption,e.target.value];
       setFilterSubCategoryOption(newFilterSubOption);
     }
-
   }
 
   //update FilteredProducts
@@ -66,7 +63,6 @@ const matchedBothProduct = products.filter(product => filterCategoryOption.inclu
     else  if (filterCategoryOption.length>0) {
       const matchedCategoryProduct = products.filter(product => filterCategoryOption.includes(product.category))
       setFilteredProducts(matchedCategoryProduct);
-
     }
     else if(filterSubCategoryOption.length>0){
       const matchedSubCategoryProduct = products.filter(product => filterSubCategoryOption.includes(product.subCategory));
@@ -76,17 +72,17 @@ const matchedBothProduct = products.filter(product => filterCategoryOption.inclu
     else {
       setFilteredProducts(products);
     }
-
   }
 
   useEffect(() => {
     updateFilteredproducts();
     console.log(filterCategoryOption,filterSubCategoryOption);
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterCategoryOption,filterSubCategoryOption]);
 
   useEffect(() => {
     console.log(filteredProducts);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateFilteredproducts])
 
 
@@ -94,15 +90,12 @@ const matchedBothProduct = products.filter(product => filterCategoryOption.inclu
 
   const searchProducts = (e) => {
     e.preventDefault();
-
     const searchtext = e.target.searchtext.value;
     if (searchtext.length > 0) {
       setSearch(searchtext);
       setFilteredProducts(products.filter(item => item.title.toLowerCase().includes(searchtext.toLowerCase())));
       setSearchResultShowed(true);
-
     }
-
   }
 
   const handleShowResults = () => {
@@ -117,7 +110,6 @@ const matchedBothProduct = products.filter(product => filterCategoryOption.inclu
    if(e.target.value==='ascending'){
     const ascending=[...filteredProducts].sort((a,b)=>a.price-b.price);
     setFilteredProducts(ascending);
-
    }
  else  if(e.target.value==='descending'){
     const descending=[...filteredProducts].sort((a,b)=>b.price-a.price);
@@ -127,25 +119,22 @@ const matchedBothProduct = products.filter(product => filterCategoryOption.inclu
     const relevant=[...filteredProducts].sort(() => Math.random() - 0.5);
     setFilteredProducts(relevant);
   }
-
   }
 
 //handle stock based sorting
-useEffect(()=>{
-  const StockedProduct= products.filter(product=>product.stock>50);
-  setStockSort(StockedProduct)},[products])
+
+
 
 
 
   return (
-    <>
+    <div className='border border-green-800'>
 <div>
   <div>
   <form onSubmit={searchProducts}>
         <input type='text' placeholder='Enter text to Search!' name='searchtext' />
         <button >Search</button>
       </form>
-
       {
        searchResultShowed? <div> showing search result for:<hr/> {search} <br/> <button className='text-red-700' onClick={handleShowResults}>  close search result</button></div> :''
       }
@@ -172,9 +161,7 @@ useEffect(()=>{
         <input type="checkbox" onChange={handleCategoryFilterInput} value={"Kids"} name="Kids" />
         <p>Kids</p>
       </div>
-
 <hr/>
-
       <div>
         <input type="checkbox" onChange={handleSubCategoryFilterInput} value={"Topwear"} name="Topwear" />
         <p>Topwear</p>
@@ -196,12 +183,9 @@ useEffect(()=>{
        filteredProducts&& filteredProducts.map((item, index) => <Product key={index} item={item}> </Product>)
       }
 <hr></hr>
-<div>Here is items which has higher stock than 50 : </div>
-      {
-        stockSort&& stockSort.map((item, index) => <Product key={index} item={item}> </Product>)
-      }
-    </>
+
+     </div>
   )
 }
 
-export default App
+export default Collection;
