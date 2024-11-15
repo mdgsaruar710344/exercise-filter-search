@@ -7,7 +7,7 @@ const ShopProvider = ({children}) => {
   const [products, setProducts] = useState([]);
   const [cart,setCart]=useState([]);
   const [cartQuantity,setCartQuantity]=useState(0);
-  const [totalCartPrice,setTotalCartPrice]=useState(0)
+  const [totalCartPrice,setTotalCartPrice]=useState(0);
 
 
   useEffect(() => {

@@ -4,7 +4,7 @@ import CartItem from "../components/CartItem";
 
 
 const Cart = () => {
-  const { cart, cartQuantity } = useContext(ShopContext)
+  const { cart, cartQuantity,totalCartPrice } = useContext(ShopContext)
 
   const [showCart, setShowCart] = useState([])
 
@@ -23,7 +23,7 @@ const Cart = () => {
           {cart && cart.map((item, index) => <CartItem key={index} item={item}></CartItem>)}
         </div>
         <div className="text-3xl">
-          Hello
+          Total Order Cost: {totalCartPrice? totalCartPrice :''}
         </div>
       </div>
 

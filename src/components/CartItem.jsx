@@ -15,10 +15,40 @@ const CartItem = ({ item }) => {
     setInputValue(Quantity);
   }, [Quantity]);
 
- useEffect(()=>{
-const total=totalCartPrice+itemTotalPrice;
-setTotalCartPrice(total);
- },[itemTotalPrice])
+
+useEffect(()=>{
+// // if(totalCartPrice>0){
+// //   setTotalCartPrice(0);
+// // }
+console.log('Cart at test:',cart)
+let total=0;
+let final=0;
+  for(const item of cart){
+    for(const product of products){
+      if(item.ID==product.id){
+        const matchedItem=item;
+        console.log(matchedItem, item.Quantity,product.price);
+  
+       total= product.price*item.Quantity;
+       final= final + total;
+      
+       
+      }
+    }
+   }
+   setTotalCartPrice(final);
+   console.log(final);
+},[cart])
+
+
+
+
+
+
+//  useEffect(()=>{
+// const total=totalCartPrice+itemTotalPrice;
+// setTotalCartPrice(total);
+//  },[itemTotalPrice])
 
   useEffect(()=>{
     console.log('Total Cart price :',totalCartPrice)
@@ -45,7 +75,7 @@ setTotalCartPrice(total);
   useEffect(() => {
     if(matchedCartItem){
       const totalitemprice = Quantity * matchedCartItem.price;
-      console.log(totalitemprice);
+      //console.log(totalitemprice);
       setItemTotalPrice(totalitemprice);
       
    
@@ -59,10 +89,10 @@ setTotalCartPrice(total);
 
   const handleUpdateQuantity = (e) => {
     const newquantity = parseInt(e.target.value);
-    console.log(newquantity);
+    //console.log(newquantity);
     if(newquantity>0){
       const QuantityUpdatedcart = cart.map(item => item.ID == ID && item.Size == Size ? { ...item, Quantity: newquantity } : item)
-      console.log(QuantityUpdatedcart);
+     // console.log(QuantityUpdatedcart);
   
       setCart(QuantityUpdatedcart);
       setInputValue(newquantity);
@@ -73,11 +103,12 @@ setTotalCartPrice(total);
 
   const handleDeleteItem=()=>{
     const deleteUpdatedCart=cart.filter(item=> !(item.ID == ID && item.Size == Size));
-    console.log(deleteUpdatedCart);
+   // console.log(deleteUpdatedCart);
     setCart([...deleteUpdatedCart]);
 
     if (deleteUpdatedCart.length === 0) {
       setCartQuantity(0); // Explicitly set total quantity to 0
+      setTotalCartPrice(0);
     }
    // setInputValue(Quantity);
   }
@@ -96,11 +127,11 @@ setTotalCartPrice(total);
     
       if (cart.length === 0) {
         setCartQuantity(0); // Reset cart quantity explicitly
-        console.log('i have been checked')
+       // console.log('i have been checked')
       } else {
         const totalQuantity = cart.reduce((sum, item) => sum + item.Quantity, 0);
         setCartQuantity(totalQuantity);
-        console.log('shit!  me too')
+       // console.log('shit!  me too')
       }
 
 //     let newTotalvalue = 0;
@@ -122,7 +153,7 @@ setTotalCartPrice(total);
 
 
   useEffect(()=>{
-    console.log('cart quantity is:',cartQuantity)
+   // console.log('cart quantity is:',cartQuantity)
   },[cartQuantity])
 
   return (
